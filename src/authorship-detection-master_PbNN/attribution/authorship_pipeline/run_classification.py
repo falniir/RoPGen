@@ -15,7 +15,7 @@ from preprocessing.time_split import time_split
 from util import ProcessedFolder, ProcessedSnapshotFolder
 from pathlib import Path
 #g_modelfile="/home/zss/data/project5/authorship-detection-master_epoch_nn_gcj5/attribution/authorship_pipeline/nn_output/grad_3_2mcts_15/"
-g_modelfile="/home/zss/data/project5/authorship-detection-master_epoch_nn_gcj5/attribution/authorship_pipeline/output/githubc2/"
+g_modelfile="E:/NLP/RoPGen/src/authorship-detection-master_PbNN/attribution//authorship_pipeline/nn_output/gcj_java/"
 def output_filename(input_file):
     if not os.path.exists('output'):
         os.mkdir('output')

@@ -3,9 +3,9 @@ import numpy as np
 from tqdm import tqdm
 
 
-origin_path = "/home/zss/data/project5/authorship-detection-master_epoch_nn_gcj5/processed/grad/githubc2/test_untar/c/"
-new_path = "/home/zss/data/project5/authorship-detection-master_epoch_nn_gcj5/processed/grad/githubc2/test_untar_20/c/"
-out_path = "/home/zss/data/project5/authorship-detection-master_epoch_nn_gcj5/processed/grad/githubc2/test_untar_20/c/"
+origin_path = "E:/NLP/RoPGen/src/authorship-detection-master_PbNN/attribution/processed/gcj_java/java/"
+new_path = "/E:/NLP/RoPGen/src/authorship-detection-master_PbNN/attribution/processed/gcj_java/java/"
+out_path = "E:/NLP/RoPGen/src/authorship-detection-master_PbNN/attribution/processed/gcj_java/java/"
 
 
 # origin_path = "/home/zss/data/project5/authorship-detection-master_epoch_nn_gcj5/processed/grad/java401/train_aug2and3/java/"

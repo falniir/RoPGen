@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 import classifiers.GeneMergeCsv as GeneMergeCsv
 from util import ProcessedFolder, ProcessedSnapshotFolder
 
-import transform_files
+#import transform_files
 
 from classifiers.BaseClassifier import BaseClassifier, ClassificationResult, compute_classification_result
 from classifiers.config import Config
@@ -180,7 +180,7 @@ class NNClassifier(BaseClassifier):
         context_splits = None
         if should_train:
             print("Load subnet data")
-            project_folder_tmp = ProcessedSnapshotFolder("/home/zss/data/project5/authorship-detection-master_epoch_nn_gcj5/processed/grad/githubc2/train_aug2_mcts/c/")
+            project_folder_tmp = ProcessedSnapshotFolder("E:/NLP/RoPGen/src/authorship-detection-master_PbNN/attribution/processed/gcj_java/java")
             classifier_sub = NNClassifier(self.config, project_folder_tmp, change_entities, change_to_time_bucket,
                             self.config.min_max_count(), author_occurrences, context_splits)
             new_batch_size = int((classifier_sub._loader._labels.size-classifier_sub._n_classes)/(train_loader.dataset._size/train_loader.batch_size))

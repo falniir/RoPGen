@@ -8,9 +8,10 @@ mode: snapshot
 seed: 239
 test_size: 0.1
 skip_read_write: 0
-final_test: 0
-training_method : GradAug  #GradAug,original
+final_test: 1
+training_method : original  #GradAug,original
 
-source_folder: /home/zss/data/project5/authorship-detection-master_epoch_nn_gcj5/processed/grad/gcjjava2/train_aug3/cpp/
+source_folder:  E:/NLP/RoPGen/src/authorship-detection-master_PbNN/attribution/processed/gcj_java/java/
+
 
 

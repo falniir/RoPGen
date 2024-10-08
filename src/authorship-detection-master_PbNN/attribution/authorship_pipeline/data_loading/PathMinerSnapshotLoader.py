@@ -54,9 +54,27 @@ class PathMinerSnapshotLoader:
 
     @staticmethod
     def _load_stub(filename: str, col_name: str) -> pd.Series:
-        df = pd.read_csv(filename, sep=',', lineterminator='\n', quoting=3)
+        # Reading CSV with proper quoting and lineterminator handling
+        df = pd.read_csv(filename, sep=',', quoting=3, engine='python')
+
+
+
+        
+        # Fill missing values in the 'token' column (if any)
+        df[col_name].fillna('', inplace=True)
+        
+        # Debugging: Print available columns and first few rows
+        print(f"Available columns in {filename}: {df.columns}")
+        print(df.head())  # Print first few rows for validation
+        
+        # Set 'id' column as index
         df = df.set_index('id')
+        
+        # Return the 'token' column as a pandas Series
+        if col_name not in df.columns:
+            raise KeyError(f"Column '{col_name}' not found in {filename}. Available columns: {df.columns}")
         return df[col_name]
+
 
     @staticmethod
     def _load_rf_contexts_file(rf_contexts_file: str) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
