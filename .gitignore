@@ -4,3 +4,5 @@ src/authorship-detection-master_PbNN/attribution/proccessed
 src/authorship-detection-master_PbNN/attribution/nn_output
 src/authorship-detection-master_PbNN/attribution/output
 src/authorship-detection-master_PbNN/attribution/authorship_pipeline/classifiers/__pycache__/
+src/authorship-detection-master_PbNN/attribution/processed/gcj_java/java/
+src/authorship-detection-master_PbNN/attribution/authorship_pipeline/model/__pycache__/r
