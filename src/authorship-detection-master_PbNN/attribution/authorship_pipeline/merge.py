@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 
 origin_path = "E:/NLP/RoPGen/src/authorship-detection-master_PbNN/attribution/processed/gcj_java/java/"
-new_path = "/E:/NLP/RoPGen/src/authorship-detection-master_PbNN/attribution/processed/gcj_java/java/"
+new_path = "E:/NLP/RoPGen/src/authorship-detection-master_PbNN/attribution/processed/gcj_java/java/"
 out_path = "E:/NLP/RoPGen/src/authorship-detection-master_PbNN/attribution/processed/gcj_java/java/"
 
 
@@ -97,20 +97,16 @@ def _load_node_types(node_types_file: str):
     return _series_to_ndarray(node_types)
 
 def _load_tokens(tokens_file: str):
-    '''
-    Loads the tokens from the given file and returns them as a numpy array.
-    
-    :param tokens_file: The path to the file containing the tokens
-    :type tokens_file: str
-    :return: A numpy array of the tokens.
-    '''
     tokens = _load_stub(tokens_file, 'token')
     return _series_to_ndarray(tokens)
 
+
 def _load_stub(filename: str, col_name: str):
     df = pd.read_csv(filename, sep=',', lineterminator='\n', quoting=3)
+    df.columns = df.columns.str.strip()  # Remove any trailing whitespace or carriage return characters
     df = df.set_index('id')
     return df[col_name]
+
 
 def _series_to_ndarray(series: pd.Series) -> list:
     converted_values = np.empty(max(series.index) + 1, dtype=np.object)

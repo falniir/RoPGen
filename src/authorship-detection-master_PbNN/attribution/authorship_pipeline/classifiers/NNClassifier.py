@@ -60,7 +60,7 @@ class NNClassifier(BaseClassifier):
         return train_loader, test_loader
         
 
-    def repair_labels(self,labels,train_original_labels,cur_original_labels=None):
+    def repair_labels(self, labels, train_original_labels, cur_original_labels=None):
         '''
         The function is used to repair the labels of the test set.
             The labels of the test set are not in the same order as the labels of the train set.
@@ -84,6 +84,7 @@ class NNClassifier(BaseClassifier):
             original_labels = cur_original_labels
         '''
         result = []
+        train_original_labels = train_original_labels.tolist()  # Convert numpy array to list
         for i in labels_list:
             result.append(train_original_labels.index(original_labels[i]))  
         result = torch.LongTensor(result)
@@ -127,9 +128,9 @@ class NNClassifier(BaseClassifier):
                     n_batches = 0
                     for sample in test_loader:
                         starts, paths, ends, labels = sample['starts'], sample['paths'], sample['ends'], sample['labels']
-                        #--------修复labels
+                        # Repair labels
                         if self.config.final_test() == 1:
-                            labels = self.repair_labels(labels,train_original_labels.tolist())
+                            labels = self.repair_labels(labels, train_original_labels)
                         batched_predictions = model((starts, paths, ends))
                         test_loss += loss_function(batched_predictions, labels)
                         n_batches += 1
@@ -273,7 +274,7 @@ class NNClassifier(BaseClassifier):
                         starts, paths, ends, labels = sample['starts'], sample['paths'], sample['ends'], sample['labels']
                         # repair labels                       
                         if self.config.final_test() == 1:
-                            labels = self.repair_labels(labels,train_original_labels.tolist())
+                            labels = self.repair_labels(labels,train_original_labels)
                         model.apply(
                                 lambda m: setattr(m, 'width_mult', 1.0))
                         batched_predictions = model((starts, paths, ends))

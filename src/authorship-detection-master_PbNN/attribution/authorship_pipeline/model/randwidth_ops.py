@@ -19,29 +19,26 @@ class RWLinear(nn.Linear):
         out_features_max = out_features
         max_width = 1.0
         if us[0]:
-            in_features_max = make_divisible(
-                in_features * max_width)
+            in_features_max = make_divisible(in_features * max_width)
         if us[1]:
-            out_features_max = make_divisible(
-                out_features * max_width)
-        super(RWLinear, self).__init__(
-            in_features_max, out_features_max, bias=bias)
+            out_features_max = make_divisible(out_features * max_width)
+        super(RWLinear, self).__init__(in_features_max, out_features_max, bias=bias)
         self.in_features_basic = in_features
         self.out_features_basic = out_features
         self.width_mult = 1.0
         self.us = us
 
     def forward(self, input):
-        print("self.width_mult is "+str(self.width_mult))
+        print("self.width_mult is " + str(self.width_mult))
         in_features = self.in_features_basic
         out_features = self.out_features_basic
         if self.us[0]:
-            in_features = make_divisible(
-                self.in_features_basic * self.width_mult)
+            in_features = make_divisible(self.in_features_basic * self.width_mult)
         if self.us[1]:
-            out_features = make_divisible(
-                self.out_features_basic * self.width_mult)
+            out_features = make_divisible(self.out_features_basic * self.width_mult)
         weight = self.weight[:out_features, :in_features]
+        if input.shape[1] != in_features:
+            raise ValueError(f"Input shape mismatch: expected {in_features}, got {input.shape[1]}")
         if self.bias is not None:
             bias = self.bias[:out_features]
         else:

@@ -9,7 +9,7 @@ seed: 239
 test_size: 0.1
 skip_read_write: 0
 final_test: 1
-training_method : original  #GradAug,original
+training_method : GradAug  #GradAug,original
 
 source_folder:  E:/NLP/RoPGen/src/authorship-detection-master_PbNN/attribution/processed/gcj_java/java/
 

@@ -1,8 +1,8 @@
 import argparse
-import os,glob
-
-import yaml
+import os
 import pickle
+import yaml
+from pathlib import Path
 from classifiers.BaseClassifier import ClassificationResult
 from classifiers.CaliskanClassifier import CaliskanClassifier
 from classifiers.NNClassifier import NNClassifier
@@ -13,14 +13,13 @@ from preprocessing.context_split import context_split
 from preprocessing.resolve_entities import resolve_entities
 from preprocessing.time_split import time_split
 from util import ProcessedFolder, ProcessedSnapshotFolder
-from pathlib import Path
-#g_modelfile="/home/zss/data/project5/authorship-detection-master_epoch_nn_gcj5/attribution/authorship_pipeline/nn_output/grad_3_2mcts_15/"
-g_modelfile="E:/NLP/RoPGen/src/authorship-detection-master_PbNN/attribution//authorship_pipeline/nn_output/gcj_java/"
+
+g_modelfile = "E:/NLP/RoPGen/src/authorship-detection-master_PbNN/attribution/authorship_pipeline/nn_output/gcj_java/"
+
 def output_filename(input_file):
     if not os.path.exists('output'):
         os.mkdir('output')
     return 'output/' + input_file
-
 
 def output_file(input_file):
     output_file = output_filename(input_file)
@@ -28,13 +27,7 @@ def output_file(input_file):
         os.makedirs(os.path.dirname(output_file))
     return open(output_file, 'w')
 
-
 def main(args):
-    '''
-    import ptvsd
-    ptvsd.enable_attach(address = ('10.188.65.192', 3004))
-    ptvsd.wait_for_attach()
-    '''
     global g_modelfile
     config = Config.fromyaml(args.config_file)
 
@@ -76,36 +69,38 @@ def main(args):
     else:
         fold_indices = [0]
 
-    skip_read_write = True if classifier.config.skip_read_write()==1 else False
+    skip_read_write = True if classifier.config.skip_read_write() == 1 else False
     isModelExist = False
     train_original_labels = []
     if not skip_read_write:
         # Loading model
         train_original_labels = []
-        if Path(g_modelfile+"0.pck").exists():
+        if Path(g_modelfile + "0.pck").exists():
             isModelExist = True
         if isModelExist:
             if isinstance(classifier.config.test_size(), int):
-                fold_indices = list(range(len(glob.glob(g_modelfile+"*.pck"))-1))
+                fold_indices = list(range(len(glob.glob(g_modelfile + "*.pck")) - 1))
             # Loading train_original_labels
             train_original_labels = pickle.load(open(g_modelfile + "train_original_labels.pck", 'rb'))
             for fold_ind in fold_indices:
-                modelfile = g_modelfile + str(fold_ind)+".pck"
-                print("Loading model --> "+modelfile)
+                modelfile = g_modelfile + str(fold_ind) + ".pck"
+                print("Loading model --> " + modelfile)
                 classifier.models[fold_ind] = pickle.load(open(modelfile, 'rb'))
-        
-    mean, std, scores, original_labels = classifier.run(fold_indices,train_original_labels)#进入交叉验证
     
+    mean, std, scores, original_labels = classifier.run(fold_indices, train_original_labels)
+
     print(original_labels)
     if not isModelExist and not skip_read_write:
+        # Ensure the directory exists before saving
+        os.makedirs(g_modelfile, exist_ok=True)
         # Save the train_original_labels for correcting the label of the test set
         pickle.dump(original_labels, file=open(g_modelfile + "train_original_labels.pck", 'wb'))
         for fold_ind in fold_indices:
             # save model
-            modelfile = g_modelfile + str(fold_ind)+".pck"
-            print("Save label --> "+modelfile)
+            modelfile = g_modelfile + str(fold_ind) + ".pck"
+            print("Save label --> " + modelfile)
             pickle.dump(classifier.models[fold_ind], file=open(modelfile, 'wb'))
-        
+    
     print(f'{mean:.3f}+-{std:.3f}')
     for i, score in enumerate(scores):
         if isinstance(score, ClassificationResult):
@@ -119,7 +114,6 @@ def main(args):
         'std': std,
         'scores': scores
     }, output_file(args.config_file), default_flow_style=False)
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
